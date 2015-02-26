@@ -5,128 +5,10 @@
   <title>Каменярня</title>
   <meta name="description" content="Каменярня">
   <meta name="author" content="Andrij Sernyak">
-  <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+  <link rel="stylesheet" href="styles.css">
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-<style>
-
-@import url(http://fonts.googleapis.com/css?family=Underdog&subset=latin,cyrillic);
-
-* {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background-color: rgb(51, 51, 51);
-  color: white;
-  font-family: Helvetica;
-}
-
-html, body {
-  height: 100%;
-}
-
-.svg-wrapper {
-  box-sizing: border-box;
-  display: inline-block;
-}
-
-.fill-w {
-  width: 100%;
-  min-width: 100%;
-}
-
-
-#logo {
- transform: scale(0.5,0.5); 
- margin-top: 0%;
-}
-
-.stonehead h1 {
-  color: white;
-
-  font-family: 'Underdog', cursive; 
-  font-size: 100pt; 
-  font-size: 15vw;
-
-  text-align: center;
-  text-shadow: 6px 6px 0px rgba(0,0,0,0.2);
-
-  margin-bottom: 0;
-}
-
-.logo_text {
-  position: absolute;
-
-  left: 0;
-  top: 5rem;
-
-  width: 100%;
-}
-
-.logo_text span {
-  display: block;
-
-  font-weight: 100;
-  font-size: 10pt;
-  font-size: 1.5vw;
-
-  color: rgb(192,192,192);
-
-  text-align: right;
-  text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
-
-  margin-top: -10px;
-
-  width: 88%;
-
-}
-
-.page-wrap {
-  width: 75%;
-  margin-left: auto;
-  margin-right: auto;
-
-  margin-top: -20%;
-
-  font-size: 14pt;
-  font-size: 2.5vw;
-
-  min-height: 100%;
-  /* equal to footer height */
-  margin-bottom: -50px; 
-}
-
-.page-wrap:after {
-  content: "";
-  display: block;
-}
-
-.site-footer, .page-wrap:after {
-  height: 50px; 
-}
-
-footer {
-  height: 50px; 
-}
-
-footer p {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-
-  font-weight: 100;
-  font-size: 10px;
-
-  background-color: rgba(128,128,128,0.25); 
-  color: rgba(255,255,255,0.5);
-
-  padding: .5rem;
-}
-
-</style>
 
 </head>
 <body>
@@ -137,17 +19,71 @@ footer p {
     <h1>Каменярня</h1>
     <span> — родовище каменю</span>
   </div>
+
+<!-- <nav class="nav" role="navigation">
+  <ul class="nav-list">
+    <li></li>
+  </ul> 
+</nav> -->
+
 </section>
 
-<section class="page-wrap">
-<h1>Скоро!</h1>
-</section>
+
+<div class="content">
+  <section class="page-wrap">
+  <p>Каменярня — упертий блог про психоделічну й стоунер музику, що радить кого почути (<a href="#occurence">#родовище</a>) й на кого сходити (<a href="#surface">#поверхня</a>).</p>
+  <p>Підписуйтесь на каменярню в соцмережах: <a href="https://vk.com/kamenarnia">VK</a> та
+  <a href="https://www.facebook.com/kamenarnia">FB</a><!--, чи по <a href="#">RSS</a>.--></p>
+  <!-- <p>Каменярня відбулась за допомоги цих прекрасних людей: 1, 2, 3. </p> -->
+  </section>
+
+  <a name="occurence"></a>
+  <img src="2.png" class="cover-img">
+  <h1 class="cover-h1-3_4">#Родовище</h1>
+
+  <section class="page-wrap">
+  <p>Музика — як каменярня, де задля діамантів перемелюються тони шлаку.</p>
+  <p>Родовище підскаже, що діамант, а що — залізо.</p>
+
+  <ul>
+    <li>Stoned Jesus "Harvest" (2015) — <i>в процесі</i></li>
+    <li>"The Gitas — Garland" — на черзі</li>
+  </ul>
+
+  </section>
+
+  <img src="1.png" class="cover-img">
+  <a name="surface"></a>
+  <h1 class="cover-h1-3_4">#Поверхня</h1>
+
+  <section class="page-wrap">
+  <p>Рано чи пізно, каменярі виходять на поверхню, щоб показати світу блиск каратів.</p>
+
+  <ul>
+    <li>28-ме лютого 2015 — <a href="atomic_simao.html">Atomic Simao</a> @ Планетарій</li>
+    <li>7-ме березня 2015 — Stoned Jesus @ Sentrum</li>
+    <li>16-те квітня 2015 — H. Soror @ Kyiv</li>
+    
+  </ul>
+
+  <!-- <p>Минулі події</p>
+  <ul>
+    <li><strike>Wintermass</strike> — <a href="#">звіт</a></li>
+  </ul> -->
+
+  </section>
+
+
+</div>
+
+
 
 <footer class="svg-wrapper fill-w">
   <object class="fill-w" data="footer.svg" type="image/svg+xml"></object>
-  <p>
-  &copy; 2015
-  </p>
+
+  <div class="text"><span>&copy; 2015, Андрій Серняк. Всі матеріали були використані в навчальних й пізнавальних цілях й ніхто не постраждав</span>
+  <span>&nbsp;&nbsp;&nbsp;<b>Rise the stone belief!</b>&nbsp;&nbsp;&nbsp;</span>
+  </div>
 </footer>
 
 	<!-- run javascript at the end -->
@@ -159,7 +95,7 @@ footer p {
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', 'UA-60135296-1', 'auto');
-  ga('send', 'pageview');
+  ga('send', 'pageview'); 
 </script>
 
 </body>
