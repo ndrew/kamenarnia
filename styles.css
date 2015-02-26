@@ -199,11 +199,14 @@ footer .text span {
 }
 
 .nav ul {
-
-  display: inline-block;
+  display: inline;
   list-style-type: none;
 }
 
+.nav ul li {
+  display: inline-block;
+  padding: 1rem;
+}
 
 a {
   color: #ffffcc;
@@ -213,8 +216,6 @@ a {
 
 .nav ul a {
   color: #ffffcc;
-  
-
   font-size: 27pt;
 
   text-decoration: none;
