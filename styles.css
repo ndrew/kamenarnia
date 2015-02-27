@@ -231,3 +231,7 @@ ul {
 ul li {
   line-height: 150%;
 }
+
+.hipster-face {
+  line-height: 1.0; font-size: 1vw; display: inline-block; width: auto; 
+}
