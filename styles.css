@@ -233,5 +233,15 @@ ul li {
 }
 
 .hipster-face {
-  line-height: 1.0; font-size: 1vw; display: inline-block; width: auto; 
+
+  font-family: "Andale Mono", monospace;
+  font-weight: lighter;
+
+  line-height: 1.0; 
+  font-size: 1.5vw;
+  display: inline-block;
+  width: auto; 
+
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+
 }
