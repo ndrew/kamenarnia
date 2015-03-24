@@ -21,8 +21,8 @@
   (conj [:ul.tasks] (map item items)))
  
 (rum/mount (item-list [1 2 3]) 
-	(.-body js/document)
-	;(el "main-area")
+	;(.-body js/document)
+	(el "test")
 	)
  
 (fw/start)
