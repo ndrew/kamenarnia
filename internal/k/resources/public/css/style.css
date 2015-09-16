@@ -1,0 +1,25 @@
+/* some style */
+
+
+.band-name {
+	text-transform: uppercase;
+	font-weight: bolder;
+	width: 100vw;
+	font-size: 10vw;
+}
+
+
+
+
+
+/* gogol fest */
+
+#gogol-calendar {
+ font-family: Helvetica;
+}
+
+
+#gogol-calendar header {
+  font-weight: bolder;
+  margin-top: 2.5rem;
+}
