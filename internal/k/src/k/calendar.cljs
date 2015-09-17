@@ -1,10 +1,30 @@
 (ns ^:figwheel-always k.calendar
   (:require
     	[rum :include-macros true]
-    	[clojure.string :refer [replace]]
+    	[clojure.string :refer [replace trim]]
       [cognitect.transit :as transit])
   (:import
     	goog.net.XhrIo))
+
+
+
+(defonce events (atom
+                 (sorted-map)))
+
+
+;; ? use for ordering later
+(def ordered-tags [ "Альтернативна Музика"
+            "Академічна музика"
+            "Перформанс"
+            "Кіно"
+            "Візуальне мистецтво"
+            "Театр"
+            "Література"
+            "Еко-програма"
+            "Танець"
+            "Фешн-арт"
+            "Дитяча програма"
+            "Освітня програма"])
 
 
 (defn read-transit [s]
@@ -25,8 +45,6 @@
 
 
 
-(defonce events (atom
-                 (sorted-map)))
 
 
 ;; temporary
@@ -37,69 +55,70 @@
             (fn [data] (swap! state merge data))))))
 
 
+
 (defn load-dates []
       (ajax "gogolfest.json"
             (fn [data]
-              (swap! events merge data))))
+              ;; clean-data
 
+              (swap! events merge data)
+              )))
+
+
+
+
+;;;
+
+(defn group-events [events]
+  (reduce (fn[a data]
+            (let [{title "title"
+                   place "place"
+                   tag "tag"
+                   t "time"} data
+                  groupped (if-let [items (get a tag)] items (sorted-map))
+                  ]
+                (assoc a tag
+
+                  (assoc groupped
+                         t (if-let [g (get groupped t)] (conj g data) [data]))))
+
+            ) {} events))
+
+
+(rum/defc event-cmp < rum/reactive [tag data]
+  [:div
+   tag
+   [:pre (pr-str data)]
+   ]
+  )
 
 
 (rum/defc calendar-cmp < rum/reactive [state]
   (let [events @state
         today (js/Date. )
-        ]
-		  [:section
+
+        buffer (atom #{})] ;; ?
+
+ 		  [:section
         [:pre "Сьогодні " (str today)]
-
-        [:pre "Тут будуть фільтри \n"
-         (pr-str #{"Театр" "Музика" "Кіно"
-                   "Для дітей" "Освіта" "Візуальне мистецтво" "Танець"
-                   "Перформанс" "Література" "Школа журналістики"
-                   "Еко-програма" "Фешн-арт"}) ]
-
+        [:pre "Тут будуть фільтри \n"]
         [:hr]
-         (into [:div]
+        (into [:div]
 		      (map (fn [[k v]]
                  ;(rum/with-props seat-col % :rum/key %)
                  [:div
                     [:header (str k " ")]
                     [:pre
 
-                      (let [[all-day timed] (split-with (fn[{t "time"}] (= "" t)) v)
-                            z (reduce (fn[m data]
-                                           (assoc m (get data "time") data)
-                                            )
-                                         (sorted-map) timed)
+                      (into [:div ] ;; (str  "Час не вказано\n" all-day  "\nРешта\n" )
+                            (let [groupped (group-events v)]
+                                ;; (pr-str (group-events v))
+                                (map
+                                   (fn[tag]
+                                      (rum/with-key (event-cmp tag (get groupped tag)) (str tag " " k))
+                                 ) ordered-tags)))
 
-                            ]
-
-
-                        (into [:div
-                               (str  "Час не вказано\n" all-day  "\nРешта\n" )
-
-                               ] (map (fn[[t data]]
-                                              (let [{title "title"
-                                                     place "place"
-                                                     tag "tag"
-                                                     } data]
-
-                                                  [:pre (str t
-                                                             "      " tag "   "
-                                                             place "          " title
-
-                                                             )]
-                                                  ))
-                                          z))
-
-                        )
-
-                     ]
-                    ]
-
-
-                 )
-
-			       events))
+                     ]]) events))
 
 
   				[:button {:on-click (fn [_]
@@ -136,6 +155,8 @@
                                     @state))
 
   					)}
+            [:pre (pr-str @buffer)]
+
   					"Testo!"
   				]]))
 
