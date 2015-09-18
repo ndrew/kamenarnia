@@ -71,9 +71,7 @@
 
 (defn group-events [events]
   (reduce (fn[a data]
-            (let [{title "title"
-                   place "place"
-                   tag "tag"
+            (let [{tag "tag"
                    t "time"} data
                   groupped (if-let [items (get a tag)] items (sorted-map))
                   ]
@@ -85,11 +83,47 @@
             ) {} events))
 
 
-(rum/defc event-cmp < rum/reactive [tag data]
-  [:div
-   tag
-   [:pre (pr-str data)]
-   ]
+
+(rum/defc event-cmp < rum/reactive [t event class]
+  (let [{title "title"
+         place "place"
+         url "url"
+        } event]
+
+      [:div {:class class}
+       [:span {:class "title"} title]
+       [:a {:href (str "//gogolfest.org.ua" url) :class "link"} "→"]
+       [:span {:class "place"} place]
+
+       ]
+
+    )
+
+  )
+
+
+(rum/defc events-cmp < rum/reactive [tag data]
+  (if-not (empty? data)
+    [:div {:class "artdir"}
+     [:header tag]
+     (into [:section {:class "group"}]
+           (map (fn[[t events]]
+               (into [:div {:class "row"} [:div {:class "col-0 time"}
+                            (if (= "" t) "весь день" t)
+
+                            ]]
+                     (map (fn[a]
+
+                              (rum/with-key (event-cmp t a (str "col-" (count events) )) (str t a))
+                              ;[:span (str (get a "place"))]
+                            ) events))
+
+             ) data)
+    )
+
+     [:div {:class "clearfix"}]
+     ])
+
   )
 
 
@@ -100,25 +134,24 @@
         buffer (atom #{})] ;; ?
 
  		  [:section
-        [:pre "Сьогодні " (str today)]
-        [:pre "Тут будуть фільтри \n"]
+        [:img {:src "map.png"}]
+        ;[:pre "Сьогодні " (str today)]
+        ;[:pre "Тут будуть фільтри \n"]
         [:hr]
         (into [:div]
 		      (map (fn [[k v]]
                  ;(rum/with-props seat-col % :rum/key %)
                  [:div
                     [:header (str k " ")]
-                    [:pre
-
                       (into [:div ] ;; (str  "Час не вказано\n" all-day  "\nРешта\n" )
                             (let [groupped (group-events v)]
                                 ;; (pr-str (group-events v))
                                 (map
                                    (fn[tag]
-                                      (rum/with-key (event-cmp tag (get groupped tag)) (str tag " " k))
+                                      (rum/with-key (events-cmp tag (get groupped tag)) (str tag " " k))
                                  ) ordered-tags)))
 
-                     ]]) events))
+                     ]) events))
 
 
   				[:button {:on-click (fn [_]

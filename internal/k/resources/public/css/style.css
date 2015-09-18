@@ -1,5 +1,10 @@
 /* some style */
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 
 .band-name {
 	text-transform: uppercase;
@@ -10,16 +15,186 @@
 
 
 
-
-
 /* gogol fest */
 
 #gogol-calendar {
- font-family: Helvetica;
+  font-family: Helvetica, sans-serif;
+  font-size: .8rem;
 }
 
 
 #gogol-calendar header {
   font-weight: bolder;
-  margin-top: 2.5rem;
+  font-size: 1.5vw;
+
+  margin-top: .5rem;
+  margin-bottom: .25rem;
+
 }
+
+
+/* .artdir {
+  height: 4rem;
+} */
+
+.artdir header {
+
+  /*background-color: rgba(128,128,128,0.1);*/
+
+  /* display: inline-block;
+
+  width: 10rem; */
+}
+
+
+
+
+.artdir section > div {
+    clear: both;
+    margin: 0;
+    padding: 0;
+}
+
+.group .row {
+    height: 2rem;
+}
+
+.group .row:nth-child(2n) {
+    background-color: rgba(128,128,128,0.05);
+}
+
+/* .artdir section > div {
+    clear: both;
+    margin: 0;
+    padding: 0;
+}
+ */
+
+.artdir section > div > div {
+   /* background-color: rgba(255,128,128,0.1); */
+
+    vertical-align: middle;
+
+    overflow: hidden;
+
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+
+
+    display: block;
+	  float:left;
+
+
+    font-size: 1.5vw;
+
+}
+
+
+.artdir section > div > div:first-child { margin-left: 0; }
+
+
+
+.col-0 {
+  min-width: 9%;
+  width: 9%;
+
+  margin-right: 1%;
+}
+
+
+.col-1 {
+  width: 90%;
+  min-width: 90%;
+
+}
+
+
+.col-2 {
+  width: 43.0%;
+  min-width: 43.0%;
+
+  margin-right: 1%;
+
+}
+
+.col-3 {
+  width: 27%;
+  min-width: 27%;
+
+  margin-right: 1%;
+
+}
+
+.col-4 {
+  width: 22.5%;
+  min-width: 22.5%;
+
+  background-color: yellow;
+}
+
+.col-5 {
+  width: 18%;
+  min-width: 18%;
+
+  background-color: lime;
+}
+
+.col-6 {
+  width: 15%;
+  min-width: 15%;
+
+  background-color: magenta;
+
+}
+
+
+.group:before,
+.group:after { content:""; display:table; }
+.group:after { clear:both;}
+.group {
+  zoom:1; /* For IE 6/7 */
+  clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+
+
+
+.clearfix:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* close commented backslash hack */
+
+
+.artdir .link {
+  padding: .1rem;
+  text-decoration: none;
+}
+
+.artdir .place {
+  display: block;
+  color: gray;
+  font-size: smaller;
+  /*padding-left: .25rem;*/
+}
+
+
+.artdir .time {
+  font-weight: 600;
+  text-align: right;
+
+  padding-top: .3rem;
+
+}
+
+
