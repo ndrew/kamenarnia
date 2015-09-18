@@ -31,6 +31,18 @@
                  "Альтернативна музична сцена (19 Павільйон)"  "pavilion19"
                  "1 Павільйон"                                    "pavilion1"
                  "Еко-простір \"Берізки\""                       "berizky"
+                 "Кінотеатр (6 Павільйон)"                       "pavilion6"
+                 "Велика Сцена-1 (9 Павільйон)"                  "pavilion9"
+                 "DIYA (Кіностудія імені Довженка)" ""
+                 "Візуальна програма (21 павільйон)"             "pavilion21"
+                 "Театральна велика сцена (17 Павільйон)"       "pavilion17"
+                 "ЦСМ ДАХ" ""
+                 "Літературний простір (38 Павільйон)"          "pavilion38"
+                 "Totem Art Space (Дегтярівська 8А)" ""
+                 "Хореографія (13 Павільйон)"                    "pavilion13"
+                 "Fashion Art (10 Павільйон)"                     "pavilion10"
+                 "Дитячий простір (11 Павільйон)"               "pavilion11"
+                 "Лекторій (2 Павільйон)"                         "pavilion2"
                  })
 
 
@@ -96,6 +108,7 @@
          place "place"
          url "url"
         } event]
+      (println (pr-str place))
 
       [:div {:class (str class " " (get locations place))}
        [:span {:class "title"} title]
@@ -134,12 +147,38 @@
   )
 
 
-(rum/defc map-cmp < rum/reactive []
-  [:img  {:src "map.png" :class "map"}])
+(defonce settings (atom {:show-map false}))
+
+(rum/defc map-cmp < rum/reactive [state]
+  (let [show (:show-map @state)]
+    (into
+      [:div
+        [:a {:href "#" :id "map-toggle"
+           :on-click (fn [e]
+
+                       (swap! state assoc :show-map (not show))
+
+                     (when-not show
+                       (js/setTimeout #(let [el (js/document.getElementById "map")]
+
+
+                                         (.scroll js/window (.-body js/document) (aget el "offsetTop") 0 )
+
+                                         ) 500 ))
+                      (.preventDefault e)
+
+                     )
+         } (if show "Сховати схему" "Показати схему")]
+       ]
+
+       (list (if show [:img  {:src "map.png" :class "map" :id "map"}] ))
+    )
+  )
+)
 
 
 (defn format-date[d]
-  (let [dmap {1 "понеділок" 2 "вівторок" 3 "середа" 4 "четвер" 5 "п'ятниця" 6 "субота" 7 "неділя"}
+  (let [dmap {1 "понеділок" 2 "вівторок" 3 "середа" 4 "четвер" 5 "п'ятниця" 6 "субота" 0 "неділя"}
         date (.getDate d)
         day (.getDay d)
         month "вересня"
@@ -155,12 +194,12 @@
         buffer (atom #{})] ;; ?
 
  		  [:section
-        (map-cmp)
+        (map-cmp settings)
         ;[:pre "Сьогодні " (str today)]
         ;[:pre "Тут будуть фільтри \n"]
         (into [:div]
 		      (map (fn [[k v]]
-                 ;(rum/with-props seat-col % :rum/key %)
+                 (if (>= (.getDate k) (.getDate today))
                  [:div
                     [:header {:class "day"} (format-date k)]
 
@@ -172,7 +211,7 @@
                                       (rum/with-key (events-cmp tag (get groupped tag)) (str tag " " k))
                                  ) ordered-tags)))
 
-                     ]) events))
+                     ])) events))
 
        ]))
 
@@ -182,4 +221,10 @@
   (rum/mount (calendar-cmp events) el)
   (add-watch events :event
       (fn [_ _ _ new-val]
-      	(rum/mount (calendar-cmp events) el))))
+      	(rum/mount (calendar-cmp events) el)))
+
+  (add-watch settings :event
+      (fn [_ _ _ new-val]
+      	(rum/mount (calendar-cmp events) el)))
+
+  )
