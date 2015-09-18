@@ -29,14 +29,6 @@ body {
 
 
   text-align: center;
-
-  color: white;
-  background-color: rgba(0,0,0,.75);
-
-  padding: .5rem;
-  margin-bottom: 1rem;
-  letter-spacing: 1px;
-
 }
 
 
@@ -219,8 +211,3 @@ body {
 }
 
 
-.map {
-  width: 100%;
-  margin-bottom: 1rem;
-
-}
