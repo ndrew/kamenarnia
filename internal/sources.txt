@@ -1,0 +1,11 @@
+.. list here sources of the news
+
+sites:
+- 
+
+bloggers:
+— robustfellow.blogspot.com
+
+bands
+- 
+
