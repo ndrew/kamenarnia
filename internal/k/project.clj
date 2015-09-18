@@ -33,12 +33,15 @@
                          :output-to "resources/public/js/compiled/k.js"
                          :output-dir "resources/public/js/compiled/out"
                          :source-map-timestamp true }}
+             
              {:id "min"
               :source-paths ["src"]
-              :compiler {:output-to "resources/public/js/compiled/k.js"
+              :compiler {:output-to "target/js/compiled/k.js"
                          :main k.core
                          :optimizations :advanced
-                         :pretty-print false}}]}
+                         :pretty-print false
+                         :warnings {:single-segment-namespace false}
+                         }}]}
 
   :figwheel {
              ;; :http-server-root "public" ;; default and assumes "resources"

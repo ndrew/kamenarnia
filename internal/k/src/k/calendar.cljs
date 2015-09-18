@@ -108,8 +108,7 @@
          place "place"
          url "url"
         } event]
-      (println (pr-str place))
-
+      
       [:div {:class (str class " " (get locations place))}
        [:span {:class "title"} title]
        [:a {:href (str "//gogolfest.org.ua" url) :class "link"} "→"]
