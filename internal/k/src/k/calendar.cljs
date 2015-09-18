@@ -2,14 +2,38 @@
   (:require
     	[rum :include-macros true]
     	[clojure.string :refer [replace trim]]
-      [cognitect.transit :as transit])
+      [cognitect.transit :as transit]
+      [cljs.reader :as cr]
+     )
   (:import
     	goog.net.XhrIo))
+
+(defn read-transit [s]
+  (transit/read (transit/reader :json) s))
+
+
+;;; local storage
+
+(defn set-ls-item!
+  "Set `key' in browser's localStorage to `val`."
+  [key val]
+  (.setItem (.-localStorage js/window) key val))
+
+(defn get-ls-item
+  "Returns value of `key' from browser's localStorage."
+  [key]
+   (.getItem (.-localStorage js/window) key))
+
+(defn remove-ls-item!
+  "Remove the browser's localStorage value for the given `key`"
+  [key]
+  (.removeItem (.-localStorage js/window) key))
 
 
 
 (defonce events (atom
                  (sorted-map)))
+
 
 
 ;; ? use for ordering later
@@ -25,6 +49,14 @@
             "Фешн-арт"
             "Дитяча програма"
             "Освітня програма"])
+
+(defonce settings (atom
+                   {:show-map false
+                    :toggled
+                      (if-let [toggled (get-ls-item "toggled")]
+                        (cr/read-string (get-ls-item "toggled"))
+                        (into #{} ordered-tags)
+                        )}))
 
 
 (def locations { "D.O.T підземна сцена (42 павільйон)"          "pavilion42"
@@ -46,8 +78,6 @@
                  })
 
 
-(defn read-transit [s]
-  (transit/read (transit/reader :json) s))
 
 
 (defn ajax [url callback & [method]]
@@ -78,12 +108,7 @@
 (defn load-dates []
       (ajax "gogolfest.json"
             (fn [data]
-              ;; clean-data
-
-              (swap! events merge data)
-              )))
-
-
+              (swap! events merge data))))
 
 
 ;;;
@@ -108,7 +133,7 @@
          place "place"
          url "url"
         } event]
-      
+
       [:div {:class (str class " " (get locations place))}
        [:span {:class "title"} title]
        [:a {:href (str "//gogolfest.org.ua" url) :class "link"} "→"]
@@ -121,8 +146,8 @@
   )
 
 
-(rum/defc events-cmp < rum/reactive [tag data]
-  (if-not (empty? data)
+(rum/defc events-cmp < rum/reactive [tag data settings]
+  (if-not (or (empty? data) (nil? (get-in @settings [:toggled tag])))
     [:div {:class "artdir"}
      [:header {:class "genre"} tag]
      (into [:section {:class "group"}]
@@ -132,21 +157,15 @@
 
                             ]]
                      (map (fn[a]
-
                               (rum/with-key (event-cmp t a (str "col-" (count events) )) (str t a))
                               ;[:span (str (get a "place"))]
                             ) events))
 
-             ) data)
-    )
-
+             ) data))
      [:div {:class "clearfix"}]
-     ])
-
-  )
+  ]))
 
 
-(defonce settings (atom {:show-map false}))
 
 (rum/defc map-cmp < rum/reactive [state]
   (let [show (:show-map @state)]
@@ -154,49 +173,59 @@
       [:div
         [:a {:href "#" :id "map-toggle"
            :on-click (fn [e]
-
                        (swap! state assoc :show-map (not show))
-
-                     (when-not show
-                       (js/setTimeout #(let [el (js/document.getElementById "map")]
-
-
-                                         (.scroll js/window (.-body js/document) (aget el "offsetTop") 0 )
-
-                                         ) 500 ))
-                      (.preventDefault e)
-
-                     )
-         } (if show "Сховати схему" "Показати схему")]
-       ]
-
-       (list (if show [:img  {:src "map.png" :class "map" :id "map"}] ))
-    )
-  )
-)
+                         (when-not show
+                           (js/setTimeout #(let [el (js/document.getElementById "map")]
+                                             (.scroll js/window (.-body js/document) (aget el "offsetTop") 0 )) 500 ))
+                          (.preventDefault e))}
+         (if show "Сховати схему" "Показати схему")]]
+       (list (if show [:img  {:src "map.png" :class "map" :id "map"}])))))
 
 
 (defn format-date[d]
   (let [dmap {1 "понеділок" 2 "вівторок" 3 "середа" 4 "четвер" 5 "п'ятниця" 6 "субота" 0 "неділя"}
         date (.getDate d)
         day (.getDay d)
+        mmap {1 "понеділок" 2 "вівторок" 3 "середа" 4 "четвер" 5 "п'ятниця" 6 "субота" 0 "неділя"}
         month "вересня"
         ]
-    (str date " " month  " (" (get dmap day) ")" )
-    )
-  ;;(str d " ")
-  )
+    (str date " " month  " (" (get dmap day) ")" )))
 
-(rum/defc calendar-cmp < rum/reactive [state]
+
+;;
+;;
+(rum/defc calendar-cmp < rum/reactive [state settings]
   (let [events @state
         today (js/Date. )
-        buffer (atom #{})] ;; ?
+        buffer (atom #{})
+        click-handler #(let [genre (.-innerHTML (.-target %))]
+
+                         (if (= "Всі" genre)
+                           (swap! settings assoc :toggled (into #{} ordered-tags))
+
+                           (swap! settings update-in [:toggled]
+                                (if (get-in @settings [:toggled genre]) disj conj) genre)
+                           )
+
+                        )
+        ] ;; ?
 
  		  [:section
         (map-cmp settings)
         ;[:pre "Сьогодні " (str today)]
-        ;[:pre "Тут будуть фільтри \n"]
-        (into [:div]
+        (into [:div
+
+               (into [:div {:class "filters"} [:span {:class "filter"} "Події: "]
+                      [:span {:class (str "filter "
+                                        (if (= (count (:toggled @settings))
+                                               (count ordered-tags))
+                                          "toggled"))
+                              :on-click click-handler} "Всі"] ]
+                     (map (fn[a] [:div {:class (str "filter " (if (get-in @settings [:toggled a]) "toggled") )
+                                        :on-click click-handler :rum/key a} a]) ordered-tags)
+                     ;'([:h1 "test"])
+                     )
+               ]
 		      (map (fn [[k v]]
                  (if (>= (.getDate k) (.getDate today))
                  [:div
@@ -204,10 +233,9 @@
 
                     (into [:div ] ;; (str  "Час не вказано\n" all-day  "\nРешта\n" )
                             (let [groupped (group-events v)]
-                                ;; (pr-str (group-events v))
                                 (map
                                    (fn[tag]
-                                      (rum/with-key (events-cmp tag (get groupped tag)) (str tag " " k))
+                                      (rum/with-key (events-cmp tag (get groupped tag) settings) (str tag " " k))
                                  ) ordered-tags)))
 
                      ])) events))
@@ -217,13 +245,15 @@
 
 
 (defn gogol-calendar[el]
-  (rum/mount (calendar-cmp events) el)
+  (rum/mount (calendar-cmp events settings) el)
   (add-watch events :event
       (fn [_ _ _ new-val]
-      	(rum/mount (calendar-cmp events) el)))
+      	(rum/mount (calendar-cmp events settings) el)))
 
-  (add-watch settings :event
-      (fn [_ _ _ new-val]
-      	(rum/mount (calendar-cmp events) el)))
+  (add-watch settings :toggled
+      (fn [new-key _ _ new-val]
+        (when (= :toggled new-key)
+          (set-ls-item! "toggled" (:toggled new-val)))
+      	(rum/mount (calendar-cmp events settings) el)))
 
   )
