@@ -55,7 +55,8 @@
                     :toggled
                       (if-let [toggled (get-ls-item "toggled")]
                         (cr/read-string (get-ls-item "toggled"))
-                        (into #{} ordered-tags)
+
+                        #{"Альтернативна Музика" "Академічна музика" "Кіно" "Візуальне мистецтво" "Театр"}
                         )}))
 
 
@@ -132,14 +133,20 @@
   (let [{title "title"
          place "place"
          url "url"
+         price "price"
         } event]
 
-      [:div {:class (str class " " (get locations place))}
+
+    (into [:div {:class (str class " " (get locations place))}
        [:span {:class "title"} title]
        [:a {:href (str "//gogolfest.org.ua" url) :class "link"} "→"]
        [:span {:class "place"} place]
 
-       ]
+     ]
+
+          (if-not (= "" price)
+            [[:span {:class "price"} (str price)]]))
+
 
     )
 

@@ -19,8 +19,17 @@ function handleEvent(index) {
 	var tag = z[0];
 	var place = z[1];
 
-	var url = el.find("a").attr("href");
+	var url = el.find("a.btn-disabled").attr("href");
 
+	var buy = el.find("a.btn-danger");
+
+	var price = "";
+	if (buy.length > 0) {
+		var price_text = el.find(".txt4 p:last-child").text();
+		
+		var b = price_text.split("\n");
+		price = b[b.length-1].replace("\t", "");
+	}
 
 	a.push({
 			title: title,
@@ -28,7 +37,8 @@ function handleEvent(index) {
 			time: time,
 			place: place,
 			tag: tag,
-			url: url
+			url: url,
+			price: price
 		});
 
 }
