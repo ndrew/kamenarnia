@@ -513,6 +513,8 @@ ul li small {
 
   padding-top: .3rem;
   text-align: right;
+
+  min-width: 9vw;
 }
 
 .map {
@@ -561,7 +563,7 @@ ul li small {
 
 
 
-.artdir .place, .artdir .price { font-size: 1.75vh; }
+.artdir .place, .artdir .price { font-size: 1.5vh; }
 .artdir .time { font-size: 2vh; margin-top: 1vw; }
 .artdir section > div > div { font-size: 3.0vh; letter-spacing: 1px; }
 
