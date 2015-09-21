@@ -562,7 +562,7 @@ ul li small {
 
 
 .artdir .place, .artdir .price { font-size: 1.75vh; }
-.artdir .time { font-size: 2vh; margin-top: 0.25vh; }
+.artdir .time { font-size: 2vh; margin-top: 1vw; }
 .artdir section > div > div { font-size: 3.0vh; letter-spacing: 1px; }
 
 #gogol-calendar header.day { font-size: 3.0vh;}
