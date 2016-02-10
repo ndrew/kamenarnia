@@ -8,6 +8,7 @@
 .grid {
   margin: 0 0 20px 0;
 }
+
 .grid:after {
   /* Or @extend clearfix */
   content: "";
@@ -49,42 +50,44 @@
   width: 12.5%;
 }
 
+
+.col-350px {
+  width: 350px;
+}
+
+
+
 .module {
   padding: 20px;
-  /*background: #eee;*/
 }
 
 /* Opt-in outside padding */
 .grid-pad {
   padding: 20px 0 20px 20px;
 }
+
 .grid-pad [class*='col-']:last-of-type {
   padding-right: 20px;
 }
 
-
 .grid ol {
-  margin-left: 3rem;
+  /*margin-left: 3rem; */
 }
+
+#app {
+  min-width: 1120px;
+}
+
 
 #app p {
   line-height: 150%;
   font-weight: 100;
   margin-bottom: 1rem;
-  /*
-  font-weight: 100;
-
-  padding: 1rem;
-
-  letter-spacing: 1px;*/
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  padding: .5rem;
 }
 
-@media (min-width: 1024px) {
-  #app p {
-    width: 75%;
-  }
-
-}
 
 
 #app ol li {
@@ -110,6 +113,10 @@
   letter-spacing: 1px;
 }
 
+#app .author img {
+  width: 100%;
+}
+
 .indented {
   text-indent: 1rem;
 }
@@ -124,8 +131,7 @@
 .bandcamp iframe, .bandcamp-tall iframe {
   display: block;
   width: 100%;
-  margin: 0 auto;
-
+  margin: 0 auto 2.5rem auto;
 }
 
 .bandcamp, .soundcloud {
@@ -165,6 +171,31 @@
 
 .right-block {
   margin-left: auto;
+}
 
+.center {
+  text-align: center; list-style-position:inside
+}
+
+
+@media (max-width: 800px) {
+
+  .col-1-3 {
+    width: 100%;
+  }
 
 }
+
+@media (min-width: 1600px) {
+  .col-1-3 p,  {
+    width:75%;
+    margin-left: 12.5%;
+  }
+
+
+  #app .author img {
+    width: 75%;
+  }
+
+}
+
