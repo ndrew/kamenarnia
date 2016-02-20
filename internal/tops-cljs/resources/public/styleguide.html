@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="file:///Users/ndrw/d/kamenarnia/internal/tops-cljs/resources/public/k/styles.css" rel="stylesheet" type="text/css">
+    <link href="file:///Users/ndrw/d/kamenarnia/internal/tops-cljs/resources/public/css/style.css" rel="stylesheet" type="text/css">
+
+    <style>
+      .styleguide [class*='col-'] {
+        /*background-color: rgba(255,128,129,0.05);*/
+      }
+
+      .debug {
+        background-color: rgba(0,0,0,.25);
+
+        outline: 1px solid rgba(0,0,0,1);
+        margin-bottom: 1px;
+
+        padding: .5rem;
+      }
+    </style>
+  </head>
+  <body class="styleguide" id="app">
+    <div class="content">
+
+
+    <p>
+      Styleguide for Kamenarnia.
+    </p>
+
+    <h1>Layout</h1>
+    <p>We use full width tempate with a grid system.</p>
+
+    <h1>Typography</h1>
+    <p>Hello</p>
+
+
+    <h1>The Grid</h1>
+
+    <p>We use very simple responsibe grid, with possibility to have fixed size columns.</p>
+
+    <h2>Fixed size columns</h2>
+
+    <h3>2 columns</h3>
+
+    <div class="grid">
+      <div class="col-fixed" style="width: 100px">
+        <div class="debug">100px</div>
+      </div>
+      <div class="col-rest-right" style="width: calc(100% - 100px);">
+        <div class="debug" >rest</div>
+      </div>
+
+      <div class="col-rest-left" style="width: calc(100% - 200px - 20px);">
+        <div class="debug">rest</div>
+      </div>
+      <div class="col-fixed" style="width: 200px !important;">
+        <div class="debug">100px</div>
+      </div>
+    </div>
+
+    <h3>2 columns (padded)</h3>
+
+    <div class="grid grid-pad">
+      <div class="col-fixed" style="width: 100px">
+        <div class="debug">100px</div>
+      </div>
+      <div class="col-rest-right" style="width: calc(100% - 100px - 20px);">
+        <div class="debug" >rest</div>
+      </div>
+
+
+      <div class="col-rest-left" style="width: calc(100% - 200px - 20px);">
+        <div class="debug">rest</div>
+      </div>
+      <div class="col-fixed" style="width: 200px !important;">
+        <div class="debug">100px</div>
+      </div>
+    </div>
+
+
+
+
+
+
+    <h2>Default</h2>
+
+    <h3>1 column</h3>
+    <div class="grid">
+      <div class="col-1-1">
+        <div class="debug">1-1</div>
+      </div>
+    </div>
+
+    <h3>2 columns</h3>
+
+    <div class="grid">
+      <div class="col-1-2">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-2">
+        <div class="debug">1-2</div>
+      </div>
+    </div>
+
+    <h3>3 columns</h3>
+
+    <div class="grid">
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+      <div class="col-2-3">
+        <div class="debug">2-3</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-2-3">
+        <div class="debug">2-3</div>
+      </div>
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+    </div>
+
+    <h3>4 columns</h3>
+    <div class="grid">
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-1-2">
+        <div class="debug">2-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-2">
+        <div class="debug">2-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-2">
+        <div class="debug">2-4</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-3-4">
+        <div class="debug">3-4</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-3-4">
+        <div class="debug">3-4</div>
+      </div>
+
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+    </div>
+
+    <h3>8 columns</h3>
+
+    <div class="grid">
+      <div class="col-1-8">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-8">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-2">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-8">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-8">
+        <div class="debug">1-2</div>
+      </div>
+    </div>
+
+
+    <h2>Outer grid padding</h2>
+
+    <div class="grid grid-pad">
+      <div class="col-1-1">
+        <div class="debug">1-1</div>
+      </div>
+    </div>
+
+
+    <div class="grid grid-pad">
+      <div class="col-1-2">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-2">
+        <div class="debug">1-2</div>
+      </div>
+    </div>
+
+    <div class="grid grid-pad">
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+      <div class="col-2-3">
+        <div class="debug">2-3</div>
+      </div>
+
+      <div class="col-2-3">
+        <div class="debug">2-3</div>
+      </div>
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+      <div class="col-1-3">
+        <div class="debug">1-3</div>
+      </div>
+
+    </div>
+
+    <div class="grid grid-pad">
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+
+
+      <div class="col-1-2">
+        <div class="debug">2-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-2">
+        <div class="debug">2-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-1-2">
+        <div class="debug">2-4</div>
+      </div>
+
+
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+      <div class="col-3-4">
+        <div class="debug">3-4</div>
+      </div>
+
+
+      <div class="col-3-4">
+        <div class="debug">3-4</div>
+      </div>
+
+      <div class="col-1-4">
+        <div class="debug">1-4</div>
+      </div>
+
+    </div>
+
+    <div class="grid grid-pad">
+      <div class="col-1-8">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-8">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-2">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-8">
+        <div class="debug">1-2</div>
+      </div>
+      <div class="col-1-8">
+        <div class="debug">1-2</div>
+      </div>
+    </div>
+
+
+
+    <h2>Inner grid padding</h2>
+
+
+    <div class="grid">
+      <div class="col-1-2">
+        <div class="module">
+          <div class="debug">1-2</div>
+        </div>
+      </div>
+
+      <div class="col-1-2">
+        <div class="module">
+          <div class="debug">1-2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-1-3">
+        <div class="module">
+          <div class="debug">1-3</div>
+        </div>
+      </div>
+
+      <div class="col-1-3">
+        <div class="module">
+          <div class="debug">1-3</div>
+        </div>
+      </div>
+
+
+      <div class="col-1-3">
+        <div class="module">
+          <div class="debug">1-3</div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+
+    </div>
+
+  </body>
+</html>
