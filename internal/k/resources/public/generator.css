@@ -1,0 +1,63 @@
+.gen-container {
+
+  background: url("back.png") no-repeat center center ;
+  background-size: cover;
+
+  margin: 3rem 0 5rem;
+}
+
+
+.gen-container a {
+  border: none;
+  text-decoration: none;
+}
+
+
+#phrase {
+  display: table-cell;
+
+  height: 70vw;
+  width: 100vw;
+
+  vertical-align: middle;
+  text-align: center;
+
+  font-size: 6rem;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, .25);
+  margin: 0 auto;
+  /*padding-left: 25vw;
+  padding-right: 25vw;*/
+  font-family: "Underdog", "Arial Black", Gadget, sans-serif;
+}
+
+#phrase span:before {
+  content: "група";
+  display: block;
+  text-transform: none;
+  font-size: 4rem;
+}
+
+#phrase span {
+  text-transform: uppercase;
+  font-size: 12rem;
+}
+
+.rainbow {
+  background-image: -webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2), color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22));
+  background-image: gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2), color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22));
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+#boo {
+  text-decoration: blink;
+}
+.blink_me {
+  animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0.0;
+  }
+}

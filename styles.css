@@ -33,6 +33,7 @@ html, body {
  margin-top: 0%;
 }
 
+
 .stonehead h1 {
   color: white;
 
@@ -54,11 +55,6 @@ html, body {
 }
 
 .logo_text {
-  position: absolute;
-
-  left: 0;
-  top: 5rem;
-
   width: 100%;
 }
 
@@ -81,8 +77,8 @@ html, body {
 }
 
 .content {
-  margin-top: -20%;
 }
+
 
 .page-wrap {
   width: 66.6%;
