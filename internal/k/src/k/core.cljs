@@ -11,9 +11,9 @@
 (defn el [id] (js/document.getElementById id))
 
 
-;(defn gogolfest-calendar []
-;  (let [mount-el (el "gogol-calendar")]
-;            (c/gogol-calendar mount-el)))
+(defn gogolfest-calendar []
+  (let [rum/mount-el (el "gogol-calendar")]
+            (c/gogol-calendar mount-el)))
 
 ;;
 ;; entry point

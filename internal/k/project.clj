@@ -1,13 +1,12 @@
 (defproject k "0.1.0-SNAPSHOT"
   :description "FIXME: write this!"
-  :url "http://kamenarnia.com.ua/"
+  :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.170"]
-                 [org.clojure/core.async "0.2.374"]
-                 [rum "0.6.0"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/clojurescript "1.8.51"]
+                 [rum "0.10.5"]
 
                  [com.cognitect/transit-clj "0.8.281"]
                  [com.cognitect/transit-cljs "0.8.225"]
@@ -15,8 +14,8 @@
 
                  ]
 
-  :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.0-1"]]
+  :plugins [[lein-cljsbuild "1.1.4"]
+            [lein-figwheel "0.5.4-7"]]
 
   :source-paths ["src"]
 

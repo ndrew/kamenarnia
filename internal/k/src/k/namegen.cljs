@@ -1608,6 +1608,7 @@
       )
   )
 
+
 (rum/defc static-cmp < rum/reactive [state]
   (let [[band style] @state
         start? (= "" band)
