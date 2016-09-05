@@ -1,6 +1,6 @@
 (ns ^:figwheel-always k.core
     (:require
-    	[rum :include-macros true]
+    	[rum.core :as rum]
     	[clojure.string :refer [replace]]
       [k.namegen :as band-gen]
 
@@ -12,7 +12,7 @@
 
 
 (defn gogolfest-calendar []
-  (let [mount-el (el "gogol-calendar")]
+  (let [rum/mount-el (el "gogol-calendar")]
             (c/gogol-calendar mount-el)))
 
 ;;

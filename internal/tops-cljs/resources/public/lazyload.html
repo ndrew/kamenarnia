@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="file:///Users/ndrw/d/kamenarnia/internal/tops-cljs/resources/public/k/styles.css" rel="stylesheet" type="text/css">
+    <link href="file:///Users/ndrw/d/kamenarnia/internal/tops-cljs/resources/public/css/style.css" rel="stylesheet" type="text/css">
+
+    <style>
+      .play-icon {
+        fill: rgba(255,255,255,0.45);
+        transition:.5s;
+      }
+
+      .play-icon:hover {
+        fill: rgba(255,255,255,0.75);
+        transition:.5s;
+      }
+
+      #bandcamp-test {
+        margin: 0 auto 2.5rem auto;
+      }
+
+    </style>
+  </head>
+  <body class="lazyload" id="app">
+    <div class="content">
+      <p>
+        Hello Lazyloading
+      </p>
+
+    <!-- bandcamp -->
+
+      <div class="bandcamp"
+           data-href="http://soom.bandcamp.com/album/fear-and-loathing"
+           data-src="http://bandcamp.com/EmbeddedPlayer/album=1257474457/size=large/bgcol=333333/linkcol=e99708/transparent=true/"
+           data-width="700px"
+           data-height="872px"
+           data-preview="file:///Users/ndrw/d/kamenarnia/internal/tops-cljs/resources/public/soom-bandcamp.jpg"
+           >
+      </div>
+
+      <div class="bandcamp"
+           data-href="http://robustfellow.bandcamp.com/album/rbf-010-celophys-2015-ammonite"
+           data-src="https://bandcamp.com/EmbeddedPlayer/album=175169834/size=large/bgcol=333333/linkcol=e99708/minimal=true/transparent=true/"
+           data-width="350px"
+           data-height="350px"
+           data-preview="file:///Users/ndrw/d/kamenarnia/internal/tops-cljs/resources/public/soom-bandcamp.jpg"
+           >
+        <!-- <iframe style="border: 0; width: 350px; height: 350px;" src="https://bandcamp.com/EmbeddedPlayer/album=175169834/size=large/bgcol=333333/linkcol=e99708/minimal=true/transparent=true/" seamless><a href="http://robustfellow.bandcamp.com/album/rbf-010-celophys-2015-ammonite">RBF 010 Celophys - 2015 - Ammonite by Robustfellow</a></iframe>-->
+      </div>
+
+
+    </div>
+
+    <script src="js/compiled/tops_cljs.js" type="text/javascript"></script>
+  </body>
+</html>

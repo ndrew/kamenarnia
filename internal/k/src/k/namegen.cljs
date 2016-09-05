@@ -1,6 +1,6 @@
 (ns ^:figwheel-always k.namegen
     (:require
-    	[rum :include-macros true]
+    	[rum.core :as rum]
     	[clojure.string :refer [replace]]))
 
 
@@ -1607,6 +1607,7 @@
 
     )
 	)
+
 
 (rum/defc static-cmp < rum/reactive [state]
 	(let [[band style] @state]

@@ -1,6 +1,6 @@
 (ns ^:figwheel-always k.calendar
   (:require
-    	[rum :include-macros true]
+    	[rum.core :as rum]
     	[clojure.string :refer [replace trim]]
       [cognitect.transit :as transit]
       [cljs.reader :as cr]
