@@ -30,8 +30,8 @@
 
 
 
-(defn load-song! []
-  (xhr/send "song.json"
+(defn load-song! [year]
+  (xhr/send (str year ".json")
               (fn [event]
                 (let [res (-> event .-target .getResponseText)]
                   (let [json (t/read (t/reader :json) res)]
@@ -45,6 +45,14 @@
     ":" "crap"
     "." "crap"
     "," "crap"
+    "``" "crap"
+    "''" "crap"
+
+    "-LRB-" "crap"
+    "-RRB-" "crap"
+
+    "PRP$" "PRB_BANG"
+
     pos)
   )
 
@@ -52,9 +60,10 @@
   [data]
 
   (into [:div ]
-            (map (fn[x] [:span {:class [ (str "sentiment-" (pos->style (:pos x)))]}
-
-                         (:token x)]) (:tokens data)))
+            (map (fn[[pos token]] [:span {:class [ (str "sentiment-" (pos->style pos))]}
+                         token])
+                   (partition 2 data))
+        )
 
 )
 
@@ -62,24 +71,76 @@
   [data]
 
   (into [:div {:class "sentiments"}]
+
         (map sentiment data)
         )
 )
 
-(rum/defc tester < rum/reactive
-  [state]
+(rum/defc song-link < { :key-fn (fn [d f]
+                                  (str (:artist d) " - " (:song d))) }
+  [d f]
 
-  (let [d (first @state)] ;; for now only use first
+  (let [id (str (:artist d) " - " (:song d))]
+    [:div
+       [:a {:href (str "http://4lyrics.eu/eurovision/" (:url d))
+            :on-click f
+            } id]
+     (str " (" (:country d) ")")
+     ]))
+
+
+
+
+(rum/defcs tester < (rum/local nil ::selected)
+  [local-state state]
+
+  (let [selected (::selected local-state)
+        ; d (first @state)
+        ] ;; for now only use first
     [:div {:class "tester"}
 
-     [:div [:a {:href (str "http://4lyrics.eu/eurovision/" (:url d))}
-            (str (:artist d) " - " (:song d))
-            ] (str " (" (:country d) ")")]
+     (if-not @selected
+      (map-indexed (fn[i d ]
+                     (song-link d (fn [e]
+                                    (reset! selected i)
+                                    (.preventDefault e)
+                                    )))  @state)
 
-     [:pre (:raw-lyrics d)]
-     [:hr]
-     (sentiments (:structure d))
-     ; [:pre (pr-str (:structure d))]
+       (let [d (nth @state @selected)
+             ]
+         [:div
+           [:div  [:a {:href "#"
+                       :on-click (fn[_] (reset! selected nil))
+                       }
+                   "<-"
+                   ] " "
+                  [:a {:href (str "http://4lyrics.eu/eurovision/" (:url d))}
+                  (str (:artist d) " - " (:song d))
+                  ] (str " (" (:country d) ")")]
+
+           ;[:pre (:raw-lyrics d)]
+
+           [:header "Popular words:"]
+          (sentiments [(apply concat (map (fn[[[pos token] freq]]
+                           [pos (str token " × " freq)]
+                               ) (partition 2 (:freq d))))])
+
+           [:header "Lyrics" ]
+           (sentiments (:structure d))
+
+            [:hr]
+
+
+
+
+
+
+          ]
+
+         )
+
+       )
+
 
      ]
     )
@@ -93,7 +154,7 @@
                (rum/mount (tester a) (.getElementById js/document "app"))))
 
 
-(load-song!)
+(load-song! "2017")
 
 
 

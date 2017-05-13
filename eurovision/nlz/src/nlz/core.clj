@@ -231,7 +231,7 @@
 (reset! EUROVISION-DATA (read-string (slurp "data/song-raw.edn")))
 
 
-(binding [*print-length* nil]
+#_(binding [*print-length* nil]
   (spit "data/raw-songs.json"
         (helpers/transit-write {:data @EUROVISION-DATA})))
 
@@ -250,28 +250,201 @@
 
 
 
+(defn- compress-sentiments
+  "transform list of maps into flat list"
+  [sentiments]
 
+
+  (map (fn[{tokens :tokens}]
+         (reduce (fn[a {pos :pos token :token}]
+                   (conj a pos token)
+                   ) [] tokens)
+
+         ) sentiments)
+  )
+
+(def pos-stoplist #{":" "." "," "``" "''" "-LRB-" "-RRB-" "?" ;; filter parenthesis and punctuation
+
+                                    "TO" ;; to
+                                    "DT" ;; the, ...
+                                    "PDT" ;; all
+
+                                    "POS" ;; filter '
+                                    "CC" ;; filter conjunctions
+
+                                    "MD" ;; filter auxiluary verbs 'd will would
+
+                                    "IN" ;; in, of, ...
+
+                                    "PRP" ;; TODO: handle PRP separately -
+
+                                    "WDT" ;; what
+                                    "WP" ;;
+
+                                    "UH" ;; uh,oh,... ;; TODO: handle separately
+                                    "FW" ;; la
+
+                                     "EX" ;; there, ...
+
+                                    })
+
+
+
+
+(defn- normalize-pos [pos]
+  (case pos
+    "NNP" "NN"
+    pos)
+  )
+
+
+
+
+(def verbs #{"VB" "VBP" "VBD" "VBG" "VBZ" "VBN"})
+(def adverbs #{"RB" "RP" })
+
+(def common-verbs #{"'re" "'s" "'m"
+                    "be" "is" "do" "does"
+                    "'ve"
+                    "let"})
+
+(defn- filter-common-verbs
+  [data]
+
+  (if-let [[pos token] data]
+    (if-not (verbs pos)
+      [pos token]
+      (if-not (common-verbs token)
+        [pos token]
+        )
+      )
+    )
+
+)
+
+
+(def common-adverbs #{"so" "n't" "just" "on" "not"})
+
+
+(defn- filter-common-advebs
+  [data]
+
+  (if-let [[pos token] data]
+    (if-not (adverbs  pos)
+      [pos token]
+      (if-not (common-adverbs token)
+        [pos token]
+        )
+      )
+    ))
+
+
+
+(defn- normalize-word [pos token]
+  (let [_pos (normalize-pos pos)
+        _token (-> token
+                 (clojure.string/lower-case))]
+
+    (-> [_pos _token]
+        (filter-common-verbs)
+        (filter-common-advebs)
+        )
+    )
+
+  )
+
+;(concat [] [])
+
+(defn- filter-useless [structure]
+ ;; add one more reduce
+  (reduce #(let [filtered (reduce (fn[a [pos token]] ;
+                    (if (pos-stoplist pos)
+                      a
+                      (concat a (normalize-word pos token))
+                    )
+                  ) [] (partition 2 %2))]
+             (if (seq filtered)
+               (conj %1 filtered)
+               %1
+               )
+
+             )
+     [] structure)
+
+
+  )
+
+#_(filter-useless  ; sampling!
+  [["," ","]
+    ["PRP" "We" "VBP" "'re" "RB" "so" "RB" "alike" "," ","
+   "RB" "yet" "JJ" "different" "IN" "At"
+   "DT" "a" "NN" "loss" "IN" "for"
+   "NNS" "words" "," "," "VBG" "stuttering"
+   "PRP" "It" "VBP" "do" "RB" "n't"
+   "VB" "make" "NN" "sense" "," ","
+   "WP" "what" "VBZ" "'s" "VBG" "happening" "." "?"]])
+
+
+(defn- word-frequency [structure]
+  (reduce (fn[all items]
+          (merge-with + all (frequencies (partition 2 items))))
+              {} (filter-useless structure)
+          )
+  )
+
+
+
+(word-frequency [["PRP" "We" "VBP" "'re" "RB" "so" "RB" "alike" "," ","
+   "RB" "yet" "JJ" "different" "IN" "At"
+   "DT" "a" "NN" "loss" "IN" "for"
+   "NNS" "words" "," "," "VBG" "stuttering"
+   "PRP" "It" "VBP" "do" "RB" "n't"
+   "VB" "make" "NN" "sense" "," ","
+   "WP" "what" "VBZ" "'s" "VBG" "happening" "." "?"]])
 
 (defn- process-song
   "initial clean-up for the songs"
   [data]
-  (let [d (clean-up-song data)]
-      (assoc d :structure (nlp/sentiment-ner-maps (:raw-lyrics d)))
-      )
-  )
+  (let [d (clean-up-song data)
+        id (str (:artist d) " - " (:song d))
+        sentiments (put-to-cache! id (fn[x] (nlp/sentiment-ner-maps (:raw-lyrics d))))
+        structure (compress-sentiments sentiments)
+        ]
+
+      (-> d
+          (assoc :structure structure)
+          (dissoc :raw-lyrics)
+          (assoc :freq (reduce concat (reverse (sort-by second (word-frequency structure))))
+        ))
+    ))
 
 
-#_(let [data (rand-nth @EUROVISION-DATA)]
+
+
+
+(let [
+       ;data (first @EUROVISION-DATA)
+       ;data [(process-song (rand-nth @EUROVISION-DATA))]
+       data (map process-song ;(take 10
+                                    (filter #(= "2017" (:year %)) @EUROVISION-DATA));)
+
+       ;data (map process-song (take 2 @EUROVISION-DATA))
+      ]
+
 
   (binding [*print-length* nil]
-    (spit "resources/public/song.json"
-          (helpers/transit-write [(process-song data)])))
+    (spit "resources/public/2017.json"
+          (helpers/transit-write data)))
+
+  ;; (process-song data)
 
   )
 
 
 
-
+  #_(binding [*print-length* nil]
+    (spit "cache.end"
+          (pr-str @CACHE)))
 
 
 (comment
@@ -321,6 +494,7 @@
 (defn parse-lyrics[lyrics]
  (reduce conj []
   (nlp/sentiment-ner-maps lyrics)))
+
 
 
 
