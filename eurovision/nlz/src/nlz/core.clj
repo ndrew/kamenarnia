@@ -228,7 +228,16 @@
 ;; part 3 - parse lyrics
 ;;
 
-(reset! EUROVISION-DATA (read-string (slurp "data/song-raw.edn")))
+#_(reset! EUROVISION-DATA (read-string (slurp "data/song-raw.edn")))
+
+
+#_(binding [*print-length* nil]
+    (spit "cache.edn"
+          (pr-str @CACHE)))
+
+
+#_(reset! CACHE (read-string (slurp "cache.edn")))
+
 
 
 #_(binding [*print-length* nil]
@@ -294,6 +303,7 @@
 (defn- normalize-pos [pos]
   (case pos
     "NNP" "NN"
+    "VBP" "VB"
     pos)
   )
 
@@ -304,9 +314,11 @@
 (def adverbs #{"RB" "RP" })
 
 (def common-verbs #{"'re" "'s" "'m"
-                    "be" "is" "do" "does"
+                    "be" "is" "do" "does" "are" "been" "am"
                     "'ve"
-                    "let"})
+                    "let" "gon"
+
+                    })
 
 (defn- filter-common-verbs
   [data]
@@ -323,7 +335,11 @@
 )
 
 
-(def common-adverbs #{"so" "n't" "just" "on" "not"})
+;, how, when, ever, how,
+
+(def common-adverbs #{"so" "n't" "just" "on" "not"
+                      "yet" "too"
+                      })
 
 
 (defn- filter-common-advebs
@@ -374,15 +390,6 @@
 
   )
 
-#_(filter-useless  ; sampling!
-  [["," ","]
-    ["PRP" "We" "VBP" "'re" "RB" "so" "RB" "alike" "," ","
-   "RB" "yet" "JJ" "different" "IN" "At"
-   "DT" "a" "NN" "loss" "IN" "for"
-   "NNS" "words" "," "," "VBG" "stuttering"
-   "PRP" "It" "VBP" "do" "RB" "n't"
-   "VB" "make" "NN" "sense" "," ","
-   "WP" "what" "VBZ" "'s" "VBG" "happening" "." "?"]])
 
 
 (defn- word-frequency [structure]
@@ -394,13 +401,65 @@
 
 
 
-(word-frequency [["PRP" "We" "VBP" "'re" "RB" "so" "RB" "alike" "," ","
-   "RB" "yet" "JJ" "different" "IN" "At"
-   "DT" "a" "NN" "loss" "IN" "for"
-   "NNS" "words" "," "," "VBG" "stuttering"
-   "PRP" "It" "VBP" "do" "RB" "n't"
-   "VB" "make" "NN" "sense" "," ","
-   "WP" "what" "VBZ" "'s" "VBG" "happening" "." "?"]])
+
+;;
+
+(defn- reduce-freqs [u]
+  (reduce (fn[a [_ f]] (+ a f)) 0 u) )
+
+(defn- reduce-pos [u]
+  (reduce (fn[a [pos _]]
+            ;(println a pos)
+
+          (cond
+            (nil? a) pos
+            (= [a pos] ["NN" "JJ"]) "NN"
+
+            (= [a pos] ["VBG" "JJ"]) "VBP" ;; wan
+            (= [a pos] ["VBG" "NN"]) "NN" ;; feeling
+
+            (= [a pos] ["VB" "VBP"]) "VB" ;; see
+            (= [a pos] ["VBP" "VB"]) "VB" ;; make
+
+            :else
+
+              (do
+                (println [a pos])
+
+                pos)
+            )
+
+          ) nil u))
+
+
+
+
+(defn- merge-words
+  [wf] ; (word-frequency [["JJ" "Yeah" "NN" "yeah"]])
+
+  (let [used (atom {})
+      duplicates (reduce-kv (fn [m [pos token] freq]
+               (if-let [u (@used token)]
+                   (do (println token)
+                   (swap! used assoc token [[(reduce-pos (conj u [pos freq]))
+                                             (reduce-freqs (conj u [pos freq]))]])
+                     )
+                   (swap! used assoc token [[pos freq]])
+                 )) {} wf)
+      ]
+
+    (reduce-kv (fn [m [pos token]  freq]
+                 (let [[[nu-pos nu-freq]] (get duplicates token)]
+                   (assoc m [nu-pos token] nu-freq)
+                   )
+                 ) {} wf)
+
+    ;duplicates
+
+  )
+  )
+
+
 
 (defn- process-song
   "initial clean-up for the songs"
@@ -414,7 +473,9 @@
       (-> d
           (assoc :structure structure)
           (dissoc :raw-lyrics)
-          (assoc :freq (reduce concat (reverse (sort-by second (word-frequency structure))))
+          (assoc :freq (reduce concat (reverse (sort-by second
+
+                                                        (merge-words (word-frequency structure)))))
         ))
     ))
 
@@ -425,26 +486,70 @@
 (let [
        ;data (first @EUROVISION-DATA)
        ;data [(process-song (rand-nth @EUROVISION-DATA))]
+       year "2017"
        data (map process-song ;(take 10
-                                    (filter #(= "2017" (:year %)) @EUROVISION-DATA));)
+                                    (filter #(= year (:year %)) @EUROVISION-DATA));)
 
        ;data (map process-song (take 2 @EUROVISION-DATA))
       ]
 
 
   (binding [*print-length* nil]
-    (spit "resources/public/2017.json"
+    (spit (str "resources/public/" year ".json")
           (helpers/transit-write data)))
 
-  ;; (process-song data)
+  ;(process-song data)
 
   )
 
 
 
-  #_(binding [*print-length* nil]
-    (spit "cache.end"
-          (pr-str @CACHE)))
+
+
+
+
+
+#_(word-frequency [["PRP" "We" "VBP" "'re" "RB" "so" "RB" "alike" "," ","
+   "RB" "yet" "JJ" "different" "IN" "At"
+   "DT" "a" "NN" "loss" "IN" "for"
+   "NNS" "words" "," "," "VBG" "stuttering"
+   "PRP" "It" "VBP" "do" "RB" "n't"
+   "VB" "make" "NN" "sense" "," ","
+   "WP" "what" "VBZ" "'s" "VBG" "happening" "." "?"]])
+
+#_(filter-useless  ; sampling!
+  [["," ","]
+    ["PRP" "We" "VBP" "'re" "RB" "so" "RB" "alike" "," ","
+   "RB" "yet" "JJ" "different" "IN" "At"
+   "DT" "a" "NN" "loss" "IN" "for"
+   "NNS" "words" "," "," "VBG" "stuttering"
+   "PRP" "It" "VBP" "do" "RB" "n't"
+   "VB" "make" "NN" "sense" "," ","
+   "WP" "what" "VBZ" "'s" "VBG" "happening" "." "?"]])
+
+
+
+
+
+
+; (word-frequency [["JJ" "Yeah" "NN" "yeah" "NN" "yo"]])
+
+;(merge-words (word-frequency [["JJ" "Yeah" "NN" "yeah" "NN" "yo"]]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 (comment

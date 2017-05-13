@@ -99,6 +99,13 @@
         ] ;; for now only use first
     [:div {:class "tester"}
 
+      [:div {:class "years"}
+       (map (fn[a]
+              [:a {:href "#"
+                   :on-click (fn[_] (load-song! a) )} a]
+              ) ["2017" "2016" "2015" "2014" "2013" "2012" "2011" "2010" "2009" "2008" "2007" "2006" "2005" "2004" "2003" "2002" "2001" "2000"])
+       ]
+
      (if-not @selected
       (map-indexed (fn[i d ]
                      (song-link d (fn [e]
